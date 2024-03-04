@@ -11,10 +11,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/guitars")
 public class InventoryController {
 
@@ -46,9 +49,14 @@ public class InventoryController {
             return false;
         }
     }
-
     @GetMapping("/find/{serialNumber}")
     public Guitar find(@PathVariable("serialNumber") String sN) throws IOException {
         return inventoryRepository.getGuitar(sN);
+    }
+
+    @GetMapping("/getall")
+    public List<Guitar> search() throws IOException {
+        Path path = Paths.get("db.txt");
+        return inventoryRepository.dbToList(path);
     }
 }
